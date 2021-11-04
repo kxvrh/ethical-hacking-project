@@ -1,0 +1,24 @@
+pycharm下载，移动到/opt --> pycharm.sh
+https://www.jetbrains.com/pycharm/download/#section=linux
+cd /opt/pycharm-community-2018.1.4/bin
+./pycharm.sh
+
+#!/usr/bin/env python
+#便于解释
+
+mac_changer:
+1. subprocess: https://docs.python.org/2/library/subprocess.html
+2. string: https://www.tutorialspoint.com/python/python_strings.htm
+3. variable: https://www.tutorialspoint.com/python/python_variable_types.htm
+4. built-in func: https://docs.python.org/2/library/functions.html#raw_input
+5. optparse: https://docs.python.org/2/library/optparse.html
+6. functions: https://www.tutorialspoint.com/python/python_functions.htm
+7. decision making: https://www.tutorialspoint.com/python/python_decision_making.htm
+8. regular expressions: https://www.tutorialspoint.com/python/python_reg_expressions.htm
+	--> https://pythex.org/
+	--> https://docs.python.org/2/library/re.html
+
+
+network scanner:
+1. scapy: https://scapy.readthedocs.io/en/latest/
+2. scapy arp ping: https://scapy.readthedocs.io/en/latest/usage.html#arp-ping
