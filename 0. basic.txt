@@ -22,3 +22,9 @@ mac_changer:
 network scanner:
 1. scapy: https://scapy.readthedocs.io/en/latest/
 2. scapy arp ping: https://scapy.readthedocs.io/en/latest/usage.html#arp-ping
+3. scapy sr: https://scapy.readthedocs.io/en/latest/usage.html#send-and-receive-packets-sr
+4. list: https://www.tutorialspoint.com/python/python_lists.htm
+5. escape character: https://docs.python.org/2.0/ref/strings.html
+6. dictionary: https://www.tutorialspoint.com/python/python_dictionary.htm
+7. argparse: https://docs.python.org/3.3/library/argparse.html
+

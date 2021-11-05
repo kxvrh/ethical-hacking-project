@@ -1,0 +1,6 @@
+1. The host machine (Windows) cannot receive ping from kali
+-->https://www.howtogeek.com/howto/windows-vista/allow-pings-icmp-echo-request-through-your-windows-vista-firewall/
+
+2. Discover devices in the same network as the host machine
+-->bridged adapter is problematic, may affect the attack
+-->use a wireless adapter, need to turn wired off
