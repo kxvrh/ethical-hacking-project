@@ -4,3 +4,5 @@
 2. Discover devices in the same network as the host machine
 -->bridged adapter is problematic, may affect the attack
 -->use a wireless adapter, need to turn wired off
+
+3. python3 function cannot be used in python2, even not being called

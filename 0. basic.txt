@@ -1,10 +1,10 @@
-pycharm下载，移动到/opt --> pycharm.sh
+pycharm download, move to /opt --> pycharm.sh
 https://www.jetbrains.com/pycharm/download/#section=linux
 cd /opt/pycharm-community-2018.1.4/bin
 ./pycharm.sh
 
 #!/usr/bin/env python
-#便于解释
+#easy to interpreter
 
 mac_changer:
 1. subprocess: https://docs.python.org/2/library/subprocess.html
@@ -28,3 +28,13 @@ network scanner:
 6. dictionary: https://www.tutorialspoint.com/python/python_dictionary.htm
 7. argparse: https://docs.python.org/3.3/library/argparse.html
 
+arp spoofer:
+1. loop: https://www.tutorialspoint.com/python/python_loops.htm
+2. exception: https://www.tutorialspoint.com/python/python_exceptions.htm
+
+sniffer:
+1. sniffer: https://scapy.readthedocs.io/en/latest/extending.html
+2. berkeley packet filter(BPF): https://biot.com/capstats/bpf.html
+3. scapy-http: https://github.com/invernizzi/scapy-http
+4. test1: http://testphp.vulnweb.com/login.php
+    test2: https://www.stealmylogin.com/demo.html
