@@ -38,3 +38,6 @@ sniffer:
 3. scapy-http: https://github.com/invernizzi/scapy-http
 4. test1: http://testphp.vulnweb.com/login.php
     test2: https://www.stealmylogin.com/demo.html
+
+file interceptor:
+1. http response: https://en.wikipedia.org/wiki/List_of_HTTP_status_codes
