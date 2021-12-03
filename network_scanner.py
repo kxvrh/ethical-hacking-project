@@ -13,7 +13,7 @@ def get_arguments():
     options = parser.parse_args()
 
     if not options.target:
-        print("[-] Please specify an target of ip range, use --help for more info.")
+        parser.error("[-] Please specify an target of ip range, use --help for more info.")
     return options
 
 def scan(ip):

